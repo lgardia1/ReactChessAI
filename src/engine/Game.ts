@@ -52,6 +52,10 @@ export default class Game {
       to,
       moveType: moveResult.type,
       capturedPiece: moveResult.target,
+      moveNumber: this.getFullMovesCounter(),
+      player: this.getCurrentTurn(),
+      timestamp: Date.now(),
+      notation: ''
     };
     this.addMove(move);
 
@@ -115,8 +119,10 @@ export default class Game {
     }
 
     pieces
-      .filter((p) => p instanceof Pawn && p.color !== piece.color)
-      .forEach((p: Pawn) => (p.justDoubleMoved = false));
+      .filter((p): p is Pawn => p instanceof Pawn && p.color !== piece.color)
+      .forEach((p) => {
+        p.justDoubleMoved = false;
+      });
 
     this.toogleTurn();
     this.addFullMove();
@@ -139,12 +145,17 @@ export default class Game {
     const box = piece.box;
     if (box === null) return { success: false, lastMoveType: null };
 
+
     const move: MoveHistory = {
       piece,
       from: box?.coordinate,
       to,
       moveType: moveResult.type,
       capturedPiece: moveResult.target,
+      moveNumber: this.getFullMovesCounter(),
+      player: this.getCurrentTurn(),
+      timestamp: Date.now(),
+      notation: ''
     };
     this.addMove(move);
 
@@ -197,8 +208,8 @@ export default class Game {
 
       case MoveType.CASTLING:
         this.addFullMove();
-        if(piece instanceof King) {
-              piece.moveCastle(to, board, moveResult.target as Piece);
+        if (piece instanceof King) {
+          piece.moveCastle(to, board, moveResult.target as Piece);
         }
         break;
     }
@@ -210,8 +221,10 @@ export default class Game {
     }
 
     pieces
-      .filter((p) => p instanceof Pawn && p.color !== piece.color)
-      .forEach((p: Pawn) => (p.justDoubleMoved = false));
+      .filter((p): p is Pawn => p instanceof Pawn && p.color !== piece.color)
+      .forEach((p) => {
+        p.justDoubleMoved = false;
+      });
 
     this.toogleTurn();
     this.addFullMove();
@@ -242,7 +255,7 @@ export default class Game {
   }
 
   async playTurn() {
-    const currentPlayer = this.getCurrentPlayer();
+    const currentPlayer = this.getCurrentPlayerTurn();
     const move = await currentPlayer.getMove(this.board);
     this.makeMoveByFromTo(move.from, move.to);
   }
@@ -255,18 +268,22 @@ export default class Game {
     return this.board.turn === currentTurn;
   }
 
+  private getCurrentTurn() {
+    return this.board.turn;
+  }
+
   private toogleTurn() {
     this.board.turn =
       this.board.turn === Color.WHITE ? Color.BLACK : Color.WHITE;
   }
 
-  getCurrentPlayerTurn(): PlayerController {
+  public getCurrentPlayerTurn(): PlayerController {
     return this.board.turn === Color.WHITE
       ? this.players.white
       : this.players.black;
   }
 
-  isKingChecked(color: Color): boolean {
+  public isKingChecked(color: Color): boolean {
     return false;
   }
 
@@ -277,7 +294,11 @@ export default class Game {
     return this.players.black;
   }
 
-  clone(): Game {
+  public getFullMovesCounter():number {
+    return this.board.fullMoveCounter;
+  }
+
+  public clone(): Game {
     const newGame = new Game(
       this.board.clone(),
       this.players.white,
@@ -286,7 +307,7 @@ export default class Game {
     );
     newGame.movesHistory = this.movesHistory;
     newGame.winner = this.winner;
-    newGame.capturePieces = this.capturePieces
+    newGame.capturePieces = this.capturePieces;
     return newGame;
   }
 }
@@ -301,14 +322,14 @@ interface MoveHistory {
 
   moveNumber: number;
   player: "white" | "black";
-  timestamp: Date;
+  timestamp: number;
   notation: string;
 }
 
 export enum PvMode {
   LOCAL,
   IA,
-  ONLINE
+  ONLINE,
 }
 export enum GameAction {
   START,
@@ -318,7 +339,7 @@ export enum GameAction {
   SET_WINNER,
   PROMOTE_PIECE,
   MOVE_IA,
-  SELECT_MODE
+  SELECT_MODE,
 }
 
 export type GameState = {

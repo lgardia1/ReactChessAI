@@ -1,4 +1,5 @@
 import type Board from "./Board";
+import type { NeighborKey } from "./Box";
 import type Box from "./Box";
 import { Color, MoveType, type PosibleMoves } from "./Piece";
 import Piece, { TypePiece, type Coordinate } from "./Piece";
@@ -34,7 +35,7 @@ export default class Pawn extends Piece {
     // ===== CAPTURA =====
     if (Math.abs(dx) === 1 && dy === dir) {
       const side = dx === -1 ? "Left" : "Right";
-      let targetBox = this.box.neighbor[forward + side] as Box;
+      let targetBox = this.box.neighbor[`{forward}${side}` as NeighborKey];
       if (targetBox === null) return null;
 
       let target = targetBox.piece;
@@ -43,7 +44,7 @@ export default class Pawn extends Piece {
         return { type: MoveType.CAPTURE, target };
       }
 
-      targetBox = this.box.neighbor[side.toLowerCase()];
+      targetBox = this.box.neighbor[side.toLowerCase() as NeighborKey];
       if(targetBox === null) return null;
       
       target = targetBox.piece;

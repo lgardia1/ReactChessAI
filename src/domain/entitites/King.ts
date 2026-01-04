@@ -1,4 +1,5 @@
 import type Board from "./Board";
+import type { NeighborKey } from "./Box";
 import type Box from "./Box";
 import { MoveType, Color, type PosibleMoves } from "./Piece";
 import Piece, { TypePiece, type Coordinate } from "./Piece";
@@ -87,8 +88,9 @@ export default class King extends Piece {
       if (targetBox === null) return null;
       const somePiece = targetBox.find((box) => box.piece !== null);
       if (somePiece !== undefined) return null;
+      const side = "left";
       const targetPiece = targetBox.pop()?.neighbor[
-        dir === 1 ? "right" : "left"
+        side as NeighborKey
       ]?.piece as Rook | null | undefined;
       if (
         !targetPiece ||

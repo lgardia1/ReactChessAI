@@ -190,7 +190,7 @@ export default class BoardBuilder {
     try {
       coordinate = coordToIndex(dataPassedPawn);
       pawn = pieces.find(
-        (p): p is Pawn => p instanceof Pawn && p.coordinate.y === coordinate.y
+        (p): p is Pawn => p instanceof Pawn && p.box?.coordinate.y === coordinate.y
       ) as Pawn | undefined;
     } catch (err) {
       throw new Error("FEN notation pawn passed . Result: " + dataPassedPawn);

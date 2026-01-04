@@ -1,7 +1,7 @@
 import { Color, MoveType, type PosibleMoves } from "./Piece";
 import Piece, { TypePiece, type Coordinate } from "./Piece";
 import Board from "./Board";
-import type Box from "../../chess-board/chess-entities/Box";
+import type Box from "./Box";
 
 export default class Rook extends Piece {
   public isFirstMove:boolean;

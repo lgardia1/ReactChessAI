@@ -1,5 +1,5 @@
 import type Board from "./Board";
-import type Box from "../../chess-board/chess-entities/Box";
+import type Box from "./Box";
 import { Color, type PosibleMoves } from "./Piece";
 import Piece, { MoveType, TypePiece, type Coordinate } from "./Piece";
 

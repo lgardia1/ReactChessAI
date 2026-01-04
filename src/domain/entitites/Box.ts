@@ -43,7 +43,7 @@ export default class Box {
         directionPathY: dy !== 0 ? stepY : "",
       });
 
-      const next = current.neighbor[dir] as Box;
+      const next = current.neighbor[dir as NeighborKey] as Box;
       if (next === null) {
         return null
       };
@@ -73,7 +73,7 @@ export default class Box {
         directionPathY: dy !== 0 ? stepY : "",
       });
 
-      const next = current.neighbor[dir] as Box;
+      const next = current.neighbor[dir as NeighborKey] as Box;
       if (next === null) return null;
 
       current = next;
@@ -94,15 +94,15 @@ export default class Box {
     directionPathY: string;
   }): string {
     if (directionPathX === "") {
-      return directionPathY;
+      return directionPathY as NeighborKey;
     }
     if (directionPathY === "") {
-      return directionPathX;
+      return directionPathX as NeighborKey;
     }
 
     return directionPathY.concat(
       directionPathX.at(0)?.toUpperCase() + directionPathX.slice(1)
-    );
+    ) as NeighborKey;
   }
 }
 
@@ -116,3 +116,6 @@ export type Neighbor = {
   downRight: Box | null;
   downLeft: Box | null;
 };
+
+export type NeighborKey = keyof Neighbor;
+

@@ -8,7 +8,7 @@ export default class Queen extends Piece {
     super(TypePiece.QUEEN, color, box);
   }
 
-  isLegalMove(newC: Coordinate, board: Board) {
+  isLegalMove(newC: Coordinate) {
     const box = this.box;
     if (box === null) return null;
     const { x, y } = box.coordinate;

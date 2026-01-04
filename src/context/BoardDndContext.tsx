@@ -14,10 +14,12 @@ export default function BoardDndProvider({children, onMove} : {children : React.
       onDragStart={({ active }) => setActivePiece(active.data.current?.piece)}
       onDragEnd={({ active, over }) => {
         setActivePiece(null);
-
-        if (over && over.data.current) {
+        if(onMove === undefined) {
+          return
+        }
+        if (over && over.data.current && over.data.current) {
           markDrop();
-          onMove(active.id as string, over.data.current.coordinate as Coordinate);
+          onMove(active.id as string, over.data.current.coordinate);
         }
       }}
     >{children}

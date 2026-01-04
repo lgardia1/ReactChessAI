@@ -4,7 +4,7 @@ import type { Coordinate } from "../domain/entitites/Piece";
 
 export const ArrowContext = createContext<{
   mouseDown: (initial: Coordinate) => void;
-  mouseUp: (last: Coordinate) => void;
+  mouseUp: (last: Coordinate, color:string) => void;
   clearAllArrows:  () => void
 }>({
   mouseDown: () => {},
@@ -18,7 +18,6 @@ export function ArrowProvider({
 }: {
   cellSize: number;
   children: React.ReactNode;
-  color?: string;
 }) {
   const initialState = useRef<Coordinate | null>(null);
   const arrowCanvas = useRef<HTMLCanvasElement | null>(null);
@@ -130,7 +129,7 @@ export function ArrowProvider({
   },[]);
 
   const mouseUp = useCallback(
-    (last: Coordinate, color = "rgba(0,0,0, .6)" ) => {
+    (last: Coordinate, color:string = "rgba(0,0,0, .6)" ) => {
       const initial = initialState.current;
       const arrow = arrowCanvas.current;
       if (!initial || !arrow) return;
